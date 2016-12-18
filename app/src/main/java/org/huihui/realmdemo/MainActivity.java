@@ -7,8 +7,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.huihui.realmexplorer.realmbrowser.RealmBrowser;
+import org.huihui.realmexplorer.realmbrowser.RealmFilesActivity;
+
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,31 +19,34 @@ public class MainActivity extends AppCompatActivity {
     private android.widget.LinearLayout activitymain;
     private Realm mDefaultInstance;
     private Button btnget;
+    private Button btnbrowser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.btnbrowser = (Button) findViewById(R.id.btn_browser);
         this.btnget = (Button) findViewById(R.id.btn_get);
         this.activitymain = (LinearLayout) findViewById(R.id.activity_main);
         this.btnsave = (Button) findViewById(R.id.btn_save);
         this.tv = (TextView) findViewById(R.id.tv);
-        Realm.init(this);
+        RealmBrowser.getInstance().addRealmModel(User.class);
 //        mDefaultInstance = Realm.getDefaultInstance();
-//        RealmConfiguration.Builder migration = new RealmConfiguration.Builder().schemaVersion(2).migration(new RealmMigration() {
+//        RealmConfiguration.Builder migration = new RealmConfiguration.Builder().schemaVersion(1).migration(new RealmMigration() {
 //            @Override
 //            public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
 //                RealmSchema schema = realm.getSchema();
-//                if (newVersion == 2) {
+//                if (newVersion == 1) {
 //                    RealmObjectSchema user = schema.get("User");
-//                    user.addField("id", Integer.class);
+////                    user.addPrimaryKey("id");
+//                    user.addField("id",Integer.class, FieldAttribute.PRIMARY_KEY);
 //                }
 //            }
 //        });
 //        mDefaultInstance = Realm.getInstance(migration.build());
 
-        RealmConfiguration build = new RealmConfiguration.Builder().schemaVersion(2).deleteRealmIfMigrationNeeded().build();//可以清空数据库避免写升级脚本
-        mDefaultInstance = Realm.getInstance(build);
+//        RealmConfiguration build = new RealmConfiguration.Builder().name("user").schemaVersion(2).deleteRealmIfMigrationNeeded().build();//可以清空数据库避免写升级脚本
+//        mDefaultInstance = Realm.getInstance(build);
 //        mDefaultInstance.where(User.class).findAll().deleteAllFromRealm(); //Realm data can only be changed inside a write transaction. 数据改变只能在事务中
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 mDefaultInstance.commitTransaction();
             }
         });
+        btnbrowser.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View view) {
+                                              RealmFilesActivity.start(MainActivity.this);
+
+                                          }
+                                      }
+        );
         btnget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
