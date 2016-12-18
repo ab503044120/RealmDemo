@@ -10,7 +10,12 @@ import android.widget.TextView;
 import org.huihui.realmexplorer.realmbrowser.RealmBrowser;
 import org.huihui.realmexplorer.realmbrowser.RealmFilesActivity;
 
+import io.realm.DynamicRealm;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
+import io.realm.RealmSchema;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,22 +37,25 @@ public class MainActivity extends AppCompatActivity {
         this.tv = (TextView) findViewById(R.id.tv);
         RealmBrowser.getInstance().addRealmModel(User.class);
 //        mDefaultInstance = Realm.getDefaultInstance();
-//        RealmConfiguration.Builder migration = new RealmConfiguration.Builder().schemaVersion(1).migration(new RealmMigration() {
-//            @Override
-//            public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
-//                RealmSchema schema = realm.getSchema();
-//                if (newVersion == 1) {
-//                    RealmObjectSchema user = schema.get("User");
-////                    user.addPrimaryKey("id");
+        RealmConfiguration.Builder migration = new RealmConfiguration.Builder().schemaVersion(1).migration(new RealmMigration() {
+            @Override
+            public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+                RealmSchema schema = realm.getSchema();
+                if (newVersion == 1) {
+                    RealmObjectSchema user = schema.get("User");
+                    user.addPrimaryKey("id");
 //                    user.addField("id",Integer.class, FieldAttribute.PRIMARY_KEY);
-//                }
-//            }
-//        });
-//        mDefaultInstance = Realm.getInstance(migration.build());
+                }
+            }
+        });
+//        new RealmConfiguration.Builder().migration()
+        mDefaultInstance = Realm.getInstance(migration.build());
 
 //        RealmConfiguration build = new RealmConfiguration.Builder().name("user").schemaVersion(2).deleteRealmIfMigrationNeeded().build();//可以清空数据库避免写升级脚本
 //        mDefaultInstance = Realm.getInstance(build);
+//        Set<RealmObjectSchema> all = mDefaultInstance.getSchema().getAll();//这里可以获取表中的属性
 //        mDefaultInstance.where(User.class).findAll().deleteAllFromRealm(); //Realm data can only be changed inside a write transaction. 数据改变只能在事务中
+
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

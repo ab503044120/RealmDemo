@@ -1,1 +1,1 @@
-include ':app', ':realmexplorer'
+include ':app', ':realmexplorer',':migrationExample'

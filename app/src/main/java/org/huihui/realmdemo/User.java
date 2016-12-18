@@ -1,14 +1,15 @@
 package org.huihui.realmdemo;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * User: huihui
  * Date: 2016-12-18 {HOUR}:27
  */
 public class User extends RealmObject {
-//    @PrimaryKey
-//    private int id;
+    @PrimaryKey
+    private int id;
     private String name;
     private int age;
 
