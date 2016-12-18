@@ -1,0 +1,3 @@
+#newidea
+
+可以直接要求开发者添加mrealm对象
