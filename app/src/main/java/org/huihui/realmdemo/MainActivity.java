@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 RealmSchema schema = realm.getSchema();
                 if (newVersion == 1) {
                     RealmObjectSchema user = schema.get("User");
-                    user.addPrimaryKey("id");
-//                    user.addField("id",Integer.class, FieldAttribute.PRIMARY_KEY);
+//                    user.addPrimaryKey("id");
+                    user.addField("id",Integer.class);
                 }
             }
         });
